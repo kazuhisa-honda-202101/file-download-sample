@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+</head>
+<body>
+	<br />
+	<div>
+		<a href="contentDisposition">aタグ download属性なし contentDispositionあり
+			→ダウンロード開始</a>
+	</div>
+	<br />
+	<div>
+		<a href="err">aタグ download属性なし contentDispositionなし →画面遷移</a>
+	</div>
+	<br />
+	<div>
+		<a href="plain" download>aタグ download属性あり contentDispositionなし
+			→ダウンロード開始</a>
+	</div>
+	<br />
+	<div>
+		<a href="err" download>aタグ download属性あり contentDispositionなし
+			→ダウンロード開始</a>
+	</div>
+	<br />
+	<div>
+		<a id="downloadLink4JS" href="#">iframeへの送信（JavaScript）
+			ContentDispositionあり →ダウンロード開始</a>
+		<form id="form4downloadByJS" style="display: none;"
+			action="contentDisposition" target="targetFrame">
+			<input name="n1" value="v1" /> <input name="n2" value="v2" />
+		</form>
+		<script>
+		downloadLink4JS.addEventListener("click", (e) => {
+			e.preventDefault()
+			form4downloadByJS.submit()
+		})
+		</script>
+	</div>
+	<br />
+	<div>
+		<a id="errorLink4JS" href="#">iframeへの送信（JavaScript）
+			ContentDispositionなし →エラーがあっても検知できそう</a>
+		<form id="form4downloadErrorByJS" style="display: none;" action="err"
+			target="targetFrame">
+			<input name="n1" value="v1" /> <input name="n2" value="v2" />
+		</form>
+		<script>
+		errorLink4JS.addEventListener("click", (e) => {
+			e.preventDefault()
+			form4downloadErrorByJS.submit()
+		})
+		</script>
+	</div>
+	<iframe name="targetFrame" style="display: none;"></iframe>
+	<script>
+	(() => {
+		const iframe = document.getElementsByName('targetFrame')[0]
+		iframe.addEventListener("load", (e) => {
+			// ダウンロードが始まる場合はここに来ないので、
+			// 何かしらエラーが発生したと想定する
+			alert(iframe.contentWindow.document.body.textContent)
+		})
+	})()
+	</script>
+</body>
+</html>
